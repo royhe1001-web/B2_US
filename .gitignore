@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+output/
+*.pkl
+*.csv
+*.db
+*.json
+*.xlsx
+*.parquet
+*.baiduyun*
+download_sp500.py
