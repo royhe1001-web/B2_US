@@ -30,6 +30,12 @@ def generate_us_signals(df: pd.DataFrame, params: dict = None) -> pd.DataFrame:
     gain = df['close'] / df['close'].shift(1) - 1
     if p.get('weight_gain_2x_thresh'):
         df.loc[gain > p['weight_gain_2x_thresh'], 'b2_position_weight'] *= p.get('weight_gain_2x', 1.5)
+
+    # 跳空高开加成 (gap > 2% -> x1.5)
+    gap = df['open'] / df['close'].shift(1) - 1
+    gap_up = gap > p.get('weight_gap_thresh', 0.02)
+    df.loc[gap_up, 'b2_position_weight'] *= p.get('weight_gap_up', 1.5)
+
     df['b2_position_weight'] = df['b2_position_weight'].clip(upper=5.0)
     df['b2_state'] = 'wait'
     return df

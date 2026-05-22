@@ -42,9 +42,9 @@ except ImportError:
 FEAT_DIR = os.path.join(BASE, 'ML_optimization', 'features')
 OUT_DIR = os.path.join(BASE, 'ML_optimization')
 
-COMMISSION_BUY = 0.0003
-COMMISSION_SELL = 0.0013
-DEFAULT_CAPITAL = 100_000
+COMMISSION_BUY = 0.00001
+COMMISSION_SELL = 0.00001
+DEFAULT_CAPITAL = 10_000
 SIM_START = pd.Timestamp.now().normalize() - pd.Timedelta(days=365)
 SIM_END = pd.Timestamp.now().normalize()
 
@@ -321,22 +321,21 @@ class OAMVSimEngine:
         # 实际不超可用现金
         alloc = min(alloc, self.cash * 0.98)
 
-        shares = int(alloc / buy_price / 100) * 100
-        # P15: min_single_amount ≥ 8000
-        if shares < 100 or shares * buy_price < 8000:
+        shares = int(alloc / buy_price)
+        if shares <= 0:
             return 0
         return shares
 
     def buy(self, signal):
         code = signal['code']
-        buy_price = signal['t1_open']
+        buy_price = signal['t1_open']  # T+1: buy at next day open
         shares = self.calc_position_size(signal['weight'], buy_price)
-        if shares == 0:
+        if shares <= 0:
             return False
         cost = shares * buy_price * (1 + COMMISSION_BUY)
         if cost > self.cash:
-            shares = int(self.cash * 0.95 / buy_price / 100) * 100
-            if shares < 100:
+            shares = int(self.cash * 0.95 / buy_price)
+            if shares <= 0:
                 return False
             cost = shares * buy_price * (1 + COMMISSION_BUY)
         self.cash -= cost
@@ -366,10 +365,8 @@ class OAMVSimEngine:
 
     def sell(self, code, date, price, reason='manual', partial=1.0):
         pos = self.positions[code]
-        sell_shares = int(pos.shares * partial / 100) * 100
-        if partial < 1.0 and sell_shares == 0:
-            sell_shares = 100  # minimum 1 lot for partial sell
-        if sell_shares < 100:
+        sell_shares = int(pos.shares * partial)
+        if sell_shares <= 0:
             return
         proceeds = sell_shares * price * (1 - COMMISSION_SELL)
         cost_part = pos.cost * partial
