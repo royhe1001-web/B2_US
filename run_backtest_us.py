@@ -35,7 +35,7 @@ BEST_B2 = {
 # 美股无OAMV - 用虚拟OAMV (始终normal)
 BEST_OAMV = {
     'oamv_aggressive_threshold': 999, 'oamv_defensive_threshold': -999,
-    'max_positions': 3,
+    'max_positions': 2,
 }
 
 
