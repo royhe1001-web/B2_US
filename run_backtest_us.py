@@ -9,7 +9,7 @@ import logging
 logging.basicConfig(level=logging.WARNING, format='%(asctime)s [%(levelname)s] %(message)s')
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-FEAT_DIR = os.path.join(BASE, 'ML_optimization', 'features')
+FEAT_DIR = os.path.join(BASE, 'ML_optimization', 'features_4h')
 
 # ============================================================
 # 美股版参数 (与A股B2策略对齐)

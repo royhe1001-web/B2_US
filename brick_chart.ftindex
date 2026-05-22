@@ -1,0 +1,7 @@
+{
+  "name": "Brick Chart",
+  "short_name": "BRICK",
+  "main_chart": false,
+  "remarks": "砖型图: 4日周期摆动指标, 红柱=持股, 绿柱=持币",
+  "code": "h4 = high().hhv(4)\nl4 = low().llv(4)\nc = close()\n\nvar1a = (h4 - c) / (h4 - l4) * 100 - 90\nvar2a = var1a.smma(4, 1) + 100\nvar3a = (c - l4) / (h4 - l4) * 100\nvar4a = var3a.smma(6, 1)\nvar5a = var4a.smma(6, 1) + 100\nvar6a = var5a - var2a\n\nbrick = (var6a > 4) * (var6a - 4)\nbrick_rising = brick.ref(1) < brick\n\nred_brick = brick_rising * brick\ngreen_brick = (brick_rising == 0) * brick\n\nplot('UP', red_brick, Color.red, Line.histogram, 2)\nplot('DN', green_brick, Color.green, Line.histogram, 2)"
+}

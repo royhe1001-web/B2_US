@@ -25,7 +25,7 @@ BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, BASE)
 
 from oamv import fetch_market_data, calc_oamv, generate_signals
-from strategy_us import generate_spring_signals
+from strategy_brick_4h import generate_spring_signals
 try:
     from forte import compute_forte, FORTE_DEFAULTS
 except ImportError:

@@ -1,0 +1,7 @@
+{
+  "name": "White & Yellow Line",
+  "short_name": "WHITE",
+  "main_chart": true,
+  "remarks": "白线=EMA(EMA(C,10),10), 黄线=(MA14+MA28+MA57+MA114)/4",
+  "code": "white = close().ema(10).ema(10)\nyellow = (close().sma(14) + close().sma(28) + close().sma(57) + close().sma(114)) / 4\n\nplot('White', white, Color.white, Line.line, 2)\nplot('Yellow', yellow, Color.yellow, Line.line, 2)"
+}
