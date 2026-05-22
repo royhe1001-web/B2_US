@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""B2 US 4h Brick — 砖型图CC信号 + 白黄线趋势过滤"""
+"""Brick US 4h — 砖型图CC信号 + 白黄线趋势过滤"""
 import numpy as np, pandas as pd
 
 def generate_spring_signals(df, board_type='main', precomputed=False, params=None):

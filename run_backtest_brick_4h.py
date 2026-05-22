@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""B2 US 4h Brick 回测 — 砖型CC + 白>黄"""
+"""Brick US 4h 回测 — 砖型CC + 白>黄"""
 import sys, os, time
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.stdout.reconfigure(encoding='utf-8')
@@ -59,7 +59,7 @@ def main():
     p2c_mod.SIM_START = test_start
     p2c_mod.SIM_END = test_end
 
-    print(f'B2 US 4h Brick — {test_start.date()} ~ {test_end.date()}')
+    print(f'Brick US 4h — {test_start.date()} ~ {test_end.date()}')
     t0 = time.time()
     engine = eng.OAMVSimEngine(stock_data, BEST_B2, oamv_df, BEST_OAMV)
     m = engine.run()

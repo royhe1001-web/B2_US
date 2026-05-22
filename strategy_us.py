@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""B2 US — 上升趋势中抄底策略 (EMA19>EMA53 + J超卖 + 未破EMA53支撑)"""
+"""Brick US — 上升趋势中抄底策略 (EMA19>EMA53 + J超卖 + 未破EMA53支撑)"""
 import numpy as np, pandas as pd
 
 def generate_us_signals(df: pd.DataFrame, params: dict = None) -> pd.DataFrame:
