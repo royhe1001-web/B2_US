@@ -397,7 +397,7 @@ class OAMVSimEngine:
         })
 
     def check_stops(self, date):
-        # 朴素版离场规则: take_half(10%) -> white_line -> yellow_line -> candle -> 4天不涨
+        # 4h砖型离场: take_half(10%) -> yellow_line -> candle(2bar免死) -> 4bar不涨
         to_sell = []
         for code, pos in self.positions.items():
             df = self.stock_data.get(code)
@@ -405,7 +405,6 @@ class OAMVSimEngine:
                 continue
             row = df.loc[date]
             close_today = float(row['close'])
-            white_line = float(row.get('white_line', 0))
             yellow_line = float(row.get('yellow_line', 0))
             buy_idx = df.index.get_loc(pos.buy_date) if pos.buy_date in df.index else None
             today_idx = df.index.get_loc(date) if date in df.index else None
@@ -415,11 +414,9 @@ class OAMVSimEngine:
 
             if not is_buy_day and cum_return >= 0.10 and not pos.half_sold:
                 to_sell.append((code, date, close_today, 'take_half', 0.50)); continue
-            if not is_buy_day and white_line > 0 and close_today < white_line:
-                to_sell.append((code, date, close_today, 'white_line', 1.0)); continue
             if not is_buy_day and yellow_line > 0 and close_today < yellow_line:
                 to_sell.append((code, date, close_today, 'yellow_line', 1.0)); continue
-            if not is_buy_day and close_today < pos.entry_low:
+            if not is_buy_day and close_today < pos.entry_low and days_held >= 2:
                 to_sell.append((code, date, close_today, 'candle', 1.0)); continue
             if not is_buy_day and days_held >= 4 and cum_return < 0:
                 to_sell.append((code, date, close_today, f'time_stop(T+{days_held})', 1.0)); continue
